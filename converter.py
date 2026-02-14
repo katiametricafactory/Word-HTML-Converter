@@ -3,22 +3,11 @@ from docx import Document
 from docx.oxml.ns import qn
 from docx.text.paragraph import Paragraph
 from html import escape
-import tempfile
-import subprocess
-import os
 
 FONT_DIV = 'font-family: Arial; font-size: 11pt;'
 
 def is_number_cell(text):
     return bool(re.search(r'\d+,\d+|\d+\.\d+|€', text))
-
-def convert_doc_to_docx(input_path):
-    output_dir = os.path.dirname(input_path)
-    subprocess.run(
-        ["libreoffice", "--headless", "--convert-to", "docx", input_path, "--outdir", output_dir],
-        check=True
-    )
-    return input_path.replace(".doc", ".docx")
 
 def build_inline_table(table):
     rows = table.rows
@@ -74,14 +63,8 @@ text-align:{align}; font-size:9pt; {nowrap} {bg}">
     return "\n".join(html)
 
 def convert_word_to_html(file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp:
-        tmp.write(file.read())
-        tmp_path = tmp.name
 
-    if tmp_path.lower().endswith(".doc"):
-        tmp_path = convert_doc_to_docx(tmp_path)
-
-    doc = Document(tmp_path)
+    doc = Document(file)
 
     html_parts = []
     html_parts.append(f'<div style="{FONT_DIV}">')
