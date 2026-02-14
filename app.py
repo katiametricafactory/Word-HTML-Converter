@@ -25,7 +25,7 @@ if uploaded_file:
         st.subheader("Código HTML (editable)")
 
         st.session_state.html_content = st.text_area(
-            "Modifica el HTML si lo necesitas",
+            "Modifica el HTML si lo necesitas. Tienes que dar clic en la parte derecha para ver el cambio",
             value=st.session_state.html_content,
             height=600
         )
@@ -62,3 +62,4 @@ if uploaded_file:
             height=600,
             scrolling=True
         )
+
